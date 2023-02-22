@@ -23,9 +23,40 @@ const rankingJapanBoxoffice2022: NextPage = () => {
         padding: 32px;
       `}
     >
-      <ol>
+      <h2
+        css={css`
+          text-align: center;
+        `}
+      >
+        2022年 国内映画興行収入ランキング
+      </h2>
+
+      <div
+        css={css`
+          padding: 24px 0;
+        `}
+      >
+
+      </div>
+      <ol
+        css={css`
+          counter-reset: item;
+          list-style-type: none;
+        `}
+      >
         {
-          movies.map((movie, i) => <li key={i}>{movie.title}</li>)
+          movies.map((movie, i) => 
+            <li 
+              key={i}
+              css={css`
+                li:before {
+                counter-increment: item;
+                content: counter(item)'.';
+              `}
+            >
+              {movie.title}
+            </li>
+          )
         }
       </ol>
     </div>
