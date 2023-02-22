@@ -1,3 +1,4 @@
+import { css } from "@emotion/react";
 import { NextPage } from "next"
 
 interface MovieData {
@@ -17,15 +18,17 @@ const movies: MovieData[] = [
 
 const rankingJapanBoxoffice2022: NextPage = () => {
   return (
-    <>
-      <div>
-        <ol>
-          {
-            movies.map(movie => <li>{movie.title}</li>)
-          }
-        </ol>
-      </div>
-    </>
+    <div 
+      css={css`
+        padding: 32px;
+      `}
+    >
+      <ol>
+        {
+          movies.map((movie, i) => <li key={i}>{movie.title}</li>)
+        }
+      </ol>
+    </div>
   )
 }
 
