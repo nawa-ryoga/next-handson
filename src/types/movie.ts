@@ -1,4 +1,5 @@
-export default interface Movie {
+export type Movie = {
+  id: number,
   title: string,
   backdrop_path?: string,
   poster_path?: string,
@@ -6,3 +7,7 @@ export default interface Movie {
   release_date: string,
   overview?: string,
 }
+
+export type MovieId = number
+
+export type MovieRevenue = number
