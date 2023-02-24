@@ -1,22 +1,43 @@
 import { css } from "@emotion/react";
-import { NextPage } from "next"
+import Movie from "../types/movie";
+import { NextPage, GetStaticProps, InferGetStaticPropsType } from "next"
 
-interface MovieData {
-  title: string
+import MovieCard from '../components/movie-ranking/movie'
+
+interface MovieIdList {
+  id: number
 }
 
-const movies: MovieData[] = [
-  { title: '作品1' },
-  { title: '作品2' },
-  { title: '作品3' },
-  { title: '作品4' },
-  { title: '作品5' },
-  { title: '作品6' },
-  { title: '作品7' },
-  { title: '作品8' },
+const movieIdList: MovieIdList[] = [
+  { id: 900667 },
+  { id: 810693 },
+  { id: 916224 },
+  { id: 361743 },
+  { id: 783675 },
+  { id: 903939 },
+  { id: 507086 },
+  { id: 961420 },
+  { id: 338953 },
+  { id: 438148 },
+  { id: 634429 },
+  { id: 634649 },
 ]
 
-const rankingJapanBoxoffice2022: NextPage = () => {
+export const getStaticProps: GetStaticProps<{ movies: Movie[] }> = async () =>  {
+
+  const promiseList = movieIdList.map(({ id }) => {
+    return fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=ja`)
+  })
+  const responseList = await Promise.all(promiseList)
+  const movies: Movie[] = await Promise.all(responseList.map(async (res): Promise<Movie> => res.json()))
+
+  return {
+    props: { movies }
+  }
+}
+
+const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ movies }) => {
+
   return (
     <div 
       css={css`
@@ -54,7 +75,7 @@ const rankingJapanBoxoffice2022: NextPage = () => {
                 content: counter(item)'.';
               `}
             >
-              {movie.title}
+              <MovieCard movie={movie} />
             </li>
           )
         }
