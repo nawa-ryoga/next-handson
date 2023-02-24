@@ -68,6 +68,7 @@ const MovieCard = ({ movie }: Props) => {
                     font-size: 14px;
                     line-height: 1.5;
                     opacity: 0.8;
+                    margin-top: 16px;
                   `}
                 >
                   {movie.overview}
