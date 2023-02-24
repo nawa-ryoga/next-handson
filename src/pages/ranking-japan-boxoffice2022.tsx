@@ -1,31 +1,26 @@
 import { css } from "@emotion/react";
-import Movie from "../types/movie";
+import { Movie, MovieId, MovieRevenue } from "../types/movie";
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from "next"
 
 import MovieCard from '../components/movie-ranking/movie'
 
-interface MovieIdList {
-  id: number
-}
-
-const movieIdList: MovieIdList[] = [
-  { id: 900667 },
-  { id: 810693 },
-  { id: 916224 },
-  { id: 361743 },
-  { id: 783675 },
-  { id: 903939 },
-  { id: 507086 },
-  { id: 961420 },
-  { id: 338953 },
-  { id: 438148 },
-  { id: 634429 },
-  { id: 634649 },
-]
+const moviesRevenueMap: ReadonlyMap<MovieId, MovieRevenue> = new Map([
+  [900667, 197],
+  [810693, 137.5],
+  [916224, 137.4],
+  [361743, 135.7],
+  [783675, 107.7],
+  [903939, 97.8],
+  [507086, 63.2],
+  [961420, 51.6],
+  [338953, 46.0],
+  [634429, 44.4],
+  [634649, 44.4],
+])
 
 export const getStaticProps: GetStaticProps<{ movies: Movie[] }> = async () =>  {
-
-  const promiseList = movieIdList.map(({ id }) => {
+  const movieIdList: MovieId[] = Array.from(moviesRevenueMap.keys())
+  const promiseList = movieIdList.map((id) => {
     return fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=ja`)
   })
   const responseList = await Promise.all(promiseList)
@@ -75,7 +70,10 @@ const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
                 content: counter(item)'.';
               `}
             >
-              <MovieCard movie={movie} />
+              <MovieCard 
+                movie={movie}
+                revenue={moviesRevenueMap.get(movie.id)!}
+              />
             </li>
           )
         }

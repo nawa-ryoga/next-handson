@@ -1,10 +1,11 @@
 import { css } from "@emotion/react";
-import Movie from "../../types/movie";
+import { Movie, MovieRevenue } from "../../types/movie";
 
 import {useClient} from "../../hooks/useClient";
 
 interface Props {
-  movie: Movie;
+  movie: Movie,
+  revenue: MovieRevenue
 }
 
 const backgroundStyle = (backdrop_path?: string): string => {
@@ -14,7 +15,7 @@ const backgroundStyle = (backdrop_path?: string): string => {
     overlay
 }
 
-const MovieCard = ({ movie }: Props) => {
+const MovieCard = ({ movie, revenue }: Props) => {
   const isClient = useClient()
 
   return (
@@ -58,9 +59,7 @@ const MovieCard = ({ movie }: Props) => {
                   `}
                   >
                     {`
-                      興行収入：${movie.revenue? 
-                      movie.revenue.toLocaleString('ja-JP', {style:'currency', currency: 'JPY'}):
-                      `情報なし`}
+                      興行収入：${revenue}億円
                     `}
                   </h4>
                 <p
