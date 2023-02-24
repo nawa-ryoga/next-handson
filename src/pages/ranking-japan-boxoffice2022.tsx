@@ -49,7 +49,7 @@ const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
           text-align: center;
         `}
       >
-        2022年 国内映画興行収入ランキング
+        2022年映画興行収入ランキング日本おすすめ（上半期/下半期/洋画/邦画/アニメ）
       </h2>
 
       <div
