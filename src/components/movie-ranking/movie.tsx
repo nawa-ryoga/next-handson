@@ -27,7 +27,7 @@ const backgroundStyle = (backdrop_path?: string): string => {
 
 type MoviePoster = Pick<Movie, "poster_path" | "title">
 
-const MoviePoster = ({poster_path, title, display, mx, mt}: MoviePoster & FlexProps) => {
+const MoviePoster = ({poster_path, title, display, mx, mt, h}: MoviePoster & FlexProps) => {
   return (
     <Flex
       maxW="150px"
@@ -36,6 +36,7 @@ const MoviePoster = ({poster_path, title, display, mx, mt}: MoviePoster & FlexPr
       display={display}
       mx={mx}
       mt={mt}
+      h={h}
     >
       <CardBody 
         p={0}
@@ -123,6 +124,7 @@ const MovieCard = ({ movie, revenue }: Props) => {
             display={{ base: "none", md: "flex" }}
             title={movie.title}
             poster_path={movie.poster_path}
+            h="100%"
           />
         </CardBody>
 
