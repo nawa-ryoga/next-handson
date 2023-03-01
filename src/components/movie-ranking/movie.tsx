@@ -8,7 +8,8 @@ import {
   Flex, 
   Card,
   CardHeader,
-  CardBody
+  CardBody,
+  HStack
 } from '@chakra-ui/react'
 
 interface Props {
@@ -26,7 +27,7 @@ const backgroundStyle = (backdrop_path?: string): string => {
 const MovieCard = ({ movie, revenue }: Props) => {
   return (
     <Card
-      maxW="60%"
+      maxW="70%"
       mx="auto"
       bg={backgroundStyle(movie.backdrop_path)}
     >
@@ -46,17 +47,27 @@ const MovieCard = ({ movie, revenue }: Props) => {
             >
               {movie.title}
             </Heading>
-            <Heading
-              as="h4"
-              size="sm"
-              fontSize="1.1rem"
-              py="1"
-            >
-              {`
-                興行収入：${revenue}億円
-              `}
-            </Heading>
+
+            <HStack>
+              <Text 
+                fontSize="0.7rem"
+                pt={0.5}
+              >
+                興行収入：
+              </Text>
+              <Heading
+                as="h4"
+                size="sm"
+                fontSize="1.1rem"
+                py="1"
+              >
+                {`
+                  ${revenue}億円
+                `}
+              </Heading>
+            </HStack>
           </CardHeader>
+
           <CardBody
             pt={0}
           >
