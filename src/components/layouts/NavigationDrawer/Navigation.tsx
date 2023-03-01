@@ -20,7 +20,7 @@ const MenuButtonText = ({text, opacity, isActive}: Pick<MenuButtonProps, "text" 
       justifyContent="start"
       background="chakra-body-bg"
       isActive={isActive}
-      _active={{ background: "black" }}
+      _active={{ background: "var(--chakra-colors-gray-700)" }}
     >
       <Text
         opacity={opacity}
@@ -77,6 +77,7 @@ const Navigation = ({smallDisplay}: {smallDisplay?: boolean}) => {
   return (
     <VStack
       py="12"
+      spacing={0}
     >
       {
         navigationMenuList().map((menu, i) =>
