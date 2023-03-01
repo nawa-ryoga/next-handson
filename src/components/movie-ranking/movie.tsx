@@ -71,6 +71,7 @@ const MovieCard = ({ movie, revenue }: Props) => {
         </Box>
         <Flex
           maxW="150px"
+          minW="150px"
           align="center"
         >
           <CardBody 
