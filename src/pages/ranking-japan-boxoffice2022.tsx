@@ -5,7 +5,8 @@ import {
   Box,
   Heading,
   OrderedList,
-  ListItem
+  ListItem,
+  VStack
 } from '@chakra-ui/react'
 
 import MovieCard from '../components/movie-ranking/movie'
@@ -60,23 +61,25 @@ const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
           list-style-type: none;
         `}
       >
-        {
-          movies.map((movie, i) => 
-            <ListItem 
-              key={i}
-              css={css`
-                li:before {
-                counter-increment: item;
-                content: counter(item)'.';
-              `}
-            >
-              <MovieCard 
-                movie={movie}
-                revenue={moviesRevenueMap.get(movie.id)!}
-              />
-            </ListItem>
-          )
-        }
+        <VStack spacing={6}>
+          {
+            movies.map((movie, i) => 
+              <ListItem 
+                key={i}
+                css={css`
+                  li:before {
+                  counter-increment: item;
+                  content: counter(item)'.';
+                `}
+              >
+                <MovieCard 
+                  movie={movie}
+                  revenue={moviesRevenueMap.get(movie.id)!}
+                />
+              </ListItem>
+            )
+          }
+        </VStack>
       </OrderedList>
     </Box>
   )
