@@ -62,9 +62,7 @@ const MovieCard = ({ movie, revenue }: Props) => {
         h="auto"
         borderRadius="4"
       >
-        <Box
-          pr="4"
-        >
+        <Box>
           <CardHeader>
             <Heading
               as="h3"
