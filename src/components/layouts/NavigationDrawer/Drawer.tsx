@@ -20,11 +20,16 @@ const ChakraUiDrawer = ({children}: Props) => {
     <>
       <Button 
         ref={btnRef} 
-        colorScheme='chakra-body-bg' 
         onClick={onOpen}
         position="fixed"
         bottom={3}
         left={3}
+        zIndex="99"
+        w={6}
+        h={6}
+        p={8}
+        borderRadius="50%"
+        background="chakra-body-bg"
       >
         <HamburgerIcon color="white" />
       </Button>
