@@ -5,8 +5,11 @@ import {
   DrawerBody, 
   DrawerOverlay,
   useDisclosure,
-  Button 
+  Button,
+  Text
 } from '@chakra-ui/react'
+
+import { HamburgerIcon } from '@chakra-ui/icons'
 
 type Props = { children: ReactNode }
 
@@ -18,14 +21,18 @@ const ChakraUiDrawer = ({children}: Props) => {
     <>
       <Button 
         ref={btnRef} 
-        colorScheme='teal' 
+        colorScheme='chakra-body-bg' 
         onClick={onOpen}
+        position="fixed"
+        bottom={3}
+        left={3}
       >
-        Open
+        <HamburgerIcon color="white" />
       </Button>
       <Drawer
         isOpen={isOpen}
         onClose={onClose}
+        placement="bottom"
       >
         <DrawerContent
           background="chakra-body-bg"
