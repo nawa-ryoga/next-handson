@@ -71,7 +71,7 @@ const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
           list-style-type: none;
         `}
       >
-        <VStack spacing={6}>
+        <VStack spacing={{ base: 12, md: 6 }}>
           {
             movies.map((movie, i) => 
               <ListItem 
