@@ -20,6 +20,7 @@ const MenuButtonText = ({text, opacity, isActive}: Pick<MenuButtonProps, "text" 
       justifyContent="start"
       background="chakra-body-bg"
       isActive={isActive}
+      _active={{ background: "black" }}
     >
       <Text
         opacity={opacity}
