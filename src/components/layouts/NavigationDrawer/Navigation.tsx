@@ -26,6 +26,7 @@ const MenuButton = ({text, link, opacity}: MenuButtonProps) => {
       >
         <Text
           opacity={opacity}
+          fontSize='0.8rem'
         >
           {text}
         </Text>

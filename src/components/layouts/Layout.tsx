@@ -19,7 +19,7 @@ const Layout = ({children}: Props) => {
       <HStack alignItems="start">
         <Box 
           display={{ base: "none", md: "block" }} 
-          minW={200}
+          minW={180}
         >
           <Navigation />
         </Box>
