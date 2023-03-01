@@ -43,18 +43,18 @@ const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
 
   return (
     <Box 
-      p="8"
+      p={{ base: 4, md: 8 }}
     >
       <VStack spacing={2}>
         <Heading
           textAlign="center"
           fontSize="1.6rem"
-          >
+        >
           2022年映画興行収入ランキング日本おすすめ
         </Heading>
         <Text
           textAlign="center"
-          fontSize="1.2rem"
+          fontSize={{ base: "0.8rem", md: "1.2rem" }}
         >
         （上半期 / 下半期 / 洋画 / 邦画 / アニメ）
         </Text>
@@ -65,6 +65,7 @@ const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
       >
       </Box>
       <OrderedList
+        marginInlineStart={0}
         css={css`
           counter-reset: item;
           list-style-type: none;

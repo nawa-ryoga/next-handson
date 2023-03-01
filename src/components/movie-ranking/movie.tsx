@@ -6,6 +6,7 @@ import {
   Text,
   Image,
   Flex, 
+  FlexProps,
   Card,
   CardHeader,
   CardBody,
@@ -24,10 +25,35 @@ const backgroundStyle = (backdrop_path?: string): string => {
     overlay
 }
 
+type MoviePoster = Pick<Movie, "poster_path" | "title">
+
+const MoviePoster = ({poster_path, title, display, mx, mt}: MoviePoster & FlexProps) => {
+  return (
+    <Flex
+      maxW="150px"
+      minW="150px"
+      align="center"
+      display={display}
+      mx={mx}
+      mt={mt}
+    >
+      <CardBody 
+        p={0}
+      >
+        <Image 
+          src={`${process.env.NEXT_PUBLIC_TMDB_IMG_PATH}/${poster_path}`} 
+          alt={`${title}のポスター`} 
+          maxW="100%"
+        />
+      </CardBody>
+    </Flex>
+  )
+}
+
 const MovieCard = ({ movie, revenue }: Props) => {
   return (
     <Card
-      maxW="70%"
+      maxW={{ base: "100%", md: "70%" }}
       mx="auto"
       bg={backgroundStyle(movie.backdrop_path)}
     >
@@ -43,12 +69,15 @@ const MovieCard = ({ movie, revenue }: Props) => {
             <Heading
               as="h3"
               size="md"
-              fontSize="1.5rem"
+              fontSize={{ base: "1.3rem", md: "1.5rem" }}
+              textAlign={{ base: "center", md: "left" }}
             >
               {movie.title}
             </Heading>
 
-            <HStack>
+            <HStack
+              justify={{ base: "center", md: "left" }}
+            >
               <Text 
                 fontSize="0.7rem"
                 pt={0.5}
@@ -61,11 +90,18 @@ const MovieCard = ({ movie, revenue }: Props) => {
                 fontSize="1.1rem"
                 py="1"
               >
-                {`
-                  ${revenue}億円
-                `}
+                {`${revenue}億円`}
               </Heading>
             </HStack>
+
+            <MoviePoster 
+              display={{ base: "flex", md: "none" }}
+              mx="auto"
+              mt={3}
+              title={movie.title}
+              poster_path={movie.poster_path}
+            />
+
           </CardHeader>
 
           <CardBody
@@ -80,22 +116,17 @@ const MovieCard = ({ movie, revenue }: Props) => {
             </Text>
           </CardBody>
         </Box>
-        <Flex
-          maxW="150px"
-          minW="150px"
-          align="center"
+
+        <CardBody
+          display={{ base: "none", md: "block" }}
         >
-          <CardBody 
-            py={0}
-            pl={0}
-          >
-            <Image 
-              src={`${process.env.NEXT_PUBLIC_TMDB_IMG_PATH}/${movie.poster_path}`} 
-              alt={`${movie.title}のポスター`} 
-              maxW="100%"
-            />
-          </CardBody>
-        </Flex>
+          <MoviePoster 
+            display={{ base: "none", md: "flex" }}
+            title={movie.title}
+            poster_path={movie.poster_path}
+          />
+        </CardBody>
+
       </Flex>
     </Card>
   )
