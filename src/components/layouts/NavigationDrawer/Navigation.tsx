@@ -1,31 +1,68 @@
-import { Box, Text, VStack, Button } from '@chakra-ui/react'
+import NextLink from 'next/link'
+import { Link } from '@chakra-ui/react'
 
-const FullWidthButton = ({text} :{ text: string }) => {
+import { Text, VStack, Button } from '@chakra-ui/react'
+
+type MenuButtonProps = { 
+  text: string, 
+  link: string, 
+  opacity: number 
+}
+
+const MenuButton = ({text, link, opacity}: MenuButtonProps) => {
   return (
-    <Button 
-      w="100%"
-      borderRadius={0}
+    <Link 
+      href={link}
+      display="contents"
+      as={NextLink}
     >
-      <Text
-        opacity={0.3}
+      <Button 
+        w="100%"
+        h={12}
+        px={8}
+        borderRadius={0}
+        justifyContent="start"
+        background="chakra-body-bg"
       >
-        {text}
-      </Text>
-    </Button>
+        <Text
+          opacity={opacity}
+        >
+          {text}
+        </Text>
+      </Button>
+    </Link>
   )
 }
 
-const Navigation = () => {
+type Menu = {
+  route: string,
+  display: string
+}
+
+type NavigationMenuList = Menu[]
+
+const navigationMenuList = (): NavigationMenuList => {
+  return [
+    { route: '/', display: 'TOP' },
+    { route: '/ranking-japan-boxoffice2022', display: '2022年ランキング' }
+  ]
+}
+
+const Navigation = ({smallDisplay}: {smallDisplay?: boolean}) => {
   return (
     <VStack
-      py="8"
-      spacing="24px"
+      py="12"
     >
-      <FullWidthButton text={`ボタン`} />
-      <FullWidthButton text={`ボタン`} />
-      <FullWidthButton text={`ボタン`} />
-      <FullWidthButton text={`ボタン`} />
-      <FullWidthButton text={`ボタン`} />
+      {
+        navigationMenuList().map((menu, i) =>
+          <MenuButton 
+            key={i}
+            text={menu.display}
+            link={menu.route}
+            opacity={smallDisplay ? 0.8: 0.3}
+          />
+        )
+      }
     </VStack>
   )
 }

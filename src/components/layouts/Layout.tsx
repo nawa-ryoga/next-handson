@@ -12,14 +12,14 @@ const Layout = ({children}: Props) => {
     <>
       <Box display={{ base: "block", md: "none", }}>
         <ChakraUiDrawer>
-          <Navigation />
+          <Navigation smallDisplay={true} />
         </ChakraUiDrawer>
       </Box>
 
       <HStack alignItems="start">
         <Box 
           display={{ base: "none", md: "block" }} 
-          minW={240}
+          minW={200}
         >
           <Navigation />
         </Box>

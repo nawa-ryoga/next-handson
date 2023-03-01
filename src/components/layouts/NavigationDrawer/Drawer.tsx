@@ -3,6 +3,7 @@ import {
   Drawer, 
   DrawerContent, 
   DrawerBody, 
+  DrawerOverlay,
   useDisclosure,
   Button 
 } from '@chakra-ui/react'
@@ -26,11 +27,14 @@ const ChakraUiDrawer = ({children}: Props) => {
         isOpen={isOpen}
         onClose={onClose}
       >
-        <DrawerContent>
+        <DrawerContent
+          background="chakra-body-bg"
+        >
           <DrawerBody>
             {children}
           </DrawerBody>
         </DrawerContent>
+        <DrawerOverlay />
       </Drawer>
     </>
   )
