@@ -1,18 +1,22 @@
 import NextLink from 'next/link'
 import { Link } from '@chakra-ui/react'
+import { useRouter } from 'next/router';
 
 import { Text, VStack, Button } from '@chakra-ui/react'
 
 type MenuButtonProps = { 
   text: string, 
-  link: string, 
+  href: string, 
   opacity: number 
 }
 
-const MenuButton = ({text, link, opacity}: MenuButtonProps) => {
+const MenuButton = ({text, href, opacity}: MenuButtonProps) => {
+  const { pathname } = useRouter()
+  const isCurrentPage = pathname === href
+
   return (
     <Link 
-      href={link}
+      href={href}
       display="contents"
       as={NextLink}
     >
@@ -25,7 +29,7 @@ const MenuButton = ({text, link, opacity}: MenuButtonProps) => {
         background="chakra-body-bg"
       >
         <Text
-          opacity={opacity}
+          opacity={ isCurrentPage ? opacity + 0.2: opacity }
           fontSize='0.8rem'
         >
           {text}
@@ -59,7 +63,7 @@ const Navigation = ({smallDisplay}: {smallDisplay?: boolean}) => {
           <MenuButton 
             key={i}
             text={menu.display}
-            link={menu.route}
+            href={menu.route}
             opacity={smallDisplay ? 0.8: 0.3}
           />
         )
