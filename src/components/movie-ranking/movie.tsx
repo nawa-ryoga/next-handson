@@ -109,6 +109,7 @@ const MovieCard = ({ movie, revenue }: Props) => {
               fontSize="14px"
               lineHeight="1.5"
               opacity="0.8"
+              textAlign="justify"
             >
               {movie.overview}
             </Text>
