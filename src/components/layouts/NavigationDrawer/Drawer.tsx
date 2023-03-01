@@ -6,7 +6,6 @@ import {
   DrawerOverlay,
   useDisclosure,
   Button,
-  Text
 } from '@chakra-ui/react'
 
 import { HamburgerIcon } from '@chakra-ui/icons'
