@@ -6,7 +6,8 @@ import {
   Heading,
   OrderedList,
   ListItem,
-  VStack
+  VStack,
+  Text
 } from '@chakra-ui/react'
 
 import MovieCard from '../components/movie-ranking/movie'
@@ -44,12 +45,20 @@ const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
     <Box 
       p="8"
     >
-      <Heading
-        textAlign="center"
-        fontSize="1.7rem"
+      <VStack spacing={2}>
+        <Heading
+          textAlign="center"
+          fontSize="1.6rem"
+          >
+          2022年映画興行収入ランキング日本おすすめ
+        </Heading>
+        <Text
+          textAlign="center"
+          fontSize="1.2rem"
         >
-        2022年映画興行収入ランキング日本おすすめ（上半期/下半期/洋画/邦画/アニメ）
-      </Heading>
+        （上半期 / 下半期 / 洋画 / 邦画 / アニメ）
+        </Text>
+      </VStack>
 
       <Box
         py="6"
