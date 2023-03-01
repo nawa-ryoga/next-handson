@@ -2,7 +2,7 @@ import NextLink from 'next/link'
 import { Link } from '@chakra-ui/react'
 import { useRouter } from 'next/router';
 
-import { Text, VStack, Button } from '@chakra-ui/react'
+import { Text, VStack, Button, ButtonProps } from '@chakra-ui/react'
 
 type MenuButtonProps = { 
   text: string, 
@@ -10,32 +10,51 @@ type MenuButtonProps = {
   opacity: number 
 }
 
+const MenuButtonText = ({text, opacity, isActive}: Pick<MenuButtonProps, "text" | "opacity"> & ButtonProps)  => {
+  return (
+    <Button 
+      w="100%"
+      h={12}
+      px={8}
+      borderRadius={0}
+      justifyContent="start"
+      background="chakra-body-bg"
+      isActive={isActive}
+    >
+      <Text
+        opacity={opacity}
+        fontSize='0.8rem'
+      >
+        {text}
+      </Text>
+    </Button>
+  )
+}
+
 const MenuButton = ({text, href, opacity}: MenuButtonProps) => {
   const { pathname } = useRouter()
   const isCurrentPage = pathname === href
+  const currentOpacity = isCurrentPage ? opacity + 0.2: opacity
 
   return (
-    <Link 
-      href={href}
-      display="contents"
-      as={NextLink}
-    >
-      <Button 
-        w="100%"
-        h={12}
-        px={8}
-        borderRadius={0}
-        justifyContent="start"
-        background="chakra-body-bg"
+    isCurrentPage ?
+
+      <MenuButtonText 
+        text={text}
+        opacity={currentOpacity}
+        isActive={true}
+      />:
+
+      <Link 
+        href={href}
+        display="contents"
+        as={NextLink}
       >
-        <Text
-          opacity={ isCurrentPage ? opacity + 0.2: opacity }
-          fontSize='0.8rem'
-        >
-          {text}
-        </Text>
-      </Button>
-    </Link>
+        <MenuButtonText 
+          text={text}
+          opacity={currentOpacity}
+        />
+      </Link>
   )
 }
 
