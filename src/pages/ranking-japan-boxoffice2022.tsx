@@ -1,6 +1,12 @@
 import { css } from "@emotion/react";
 import { Movie, MovieId, MovieRevenue } from "../types/movie";
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from "next"
+import {
+  Box,
+  Heading,
+  OrderedList,
+  ListItem
+} from '@chakra-ui/react'
 
 import MovieCard from '../components/movie-ranking/movie'
 
@@ -34,27 +40,21 @@ export const getStaticProps: GetStaticProps<{ movies: Movie[] }> = async () =>  
 const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ movies }) => {
 
   return (
-    <div 
-      css={css`
-        padding: 32px;
-      `}
+    <Box 
+      p="8"
     >
-      <h2
-        css={css`
-          text-align: center;
-        `}
-      >
+      <Heading
+        textAlign="center"
+        fontSize="1.7rem"
+        >
         2022年映画興行収入ランキング日本おすすめ（上半期/下半期/洋画/邦画/アニメ）
-      </h2>
+      </Heading>
 
-      <div
-        css={css`
-          padding: 24px 0;
-        `}
+      <Box
+        py="6"
       >
-
-      </div>
-      <ol
+      </Box>
+      <OrderedList
         css={css`
           counter-reset: item;
           list-style-type: none;
@@ -62,7 +62,7 @@ const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
       >
         {
           movies.map((movie, i) => 
-            <li 
+            <ListItem 
               key={i}
               css={css`
                 li:before {
@@ -74,11 +74,11 @@ const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
                 movie={movie}
                 revenue={moviesRevenueMap.get(movie.id)!}
               />
-            </li>
+            </ListItem>
           )
         }
-      </ol>
-    </div>
+      </OrderedList>
+    </Box>
   )
 }
 
