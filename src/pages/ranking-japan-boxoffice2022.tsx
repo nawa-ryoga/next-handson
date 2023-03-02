@@ -26,7 +26,7 @@ const moviesRevenueMap: ReadonlyMap<MovieId, MovieRevenue> = new Map([
   [634649, 44.4],
 ])
 
-const getMovieList = (): Promise<Movie>[] => {
+const getTopTenMovieData = (): Promise<Movie>[] => {
   const movieIdList: MovieId[] = Array.from(moviesRevenueMap.keys())
   return movieIdList.map((id) => {
     return fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=ja`).then(res => res.json())
@@ -34,7 +34,7 @@ const getMovieList = (): Promise<Movie>[] => {
 }
 
 export const getStaticProps: GetStaticProps<{ movies: Movie[] }> = async () =>  {
-  const movies: Movie[] = await Promise.all(getMovieList())
+  const movies: Movie[] = await Promise.all(getTopTenMovieData())
 
   return {
     props: { movies },
