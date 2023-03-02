@@ -24,7 +24,7 @@ const ChakraUiDrawer = ({children}: Props) => {
         position="fixed"
         bottom={3}
         left={3}
-        zIndex="99"
+        zIndex={"tooltip"}
         w={6}
         h={6}
         p={8}
