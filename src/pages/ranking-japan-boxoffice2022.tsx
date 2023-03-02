@@ -48,9 +48,17 @@ const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
       <VStack spacing={2}>
         <Heading
           textAlign="center"
-          fontSize="1.6rem"
+          fontSize="1.3rem"
+          display={{ base: "block", md: "none" }}
         >
-          2022年映画興行収入ランキング日本おすすめ
+          2022年映画興行収入ランキング<br/>日本おすすめ
+        </Heading>
+        <Heading
+          textAlign="center"
+          fontSize="1.6rem"
+          display={{ base: "none", md: "block" }}
+        >
+          2022年映画興行収入ランキング 日本おすすめ
         </Heading>
         <Text
           textAlign="center"
