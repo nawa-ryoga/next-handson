@@ -7,12 +7,14 @@ import {
   OrderedList,
   ListItem,
   VStack,
-  Text
+  Text,
+  Button,
+  Flex
 } from '@chakra-ui/react'
+import { CheckIcon } from '@chakra-ui/icons'
 
 import type { Movie } from "types/movie";
 import movieIdRevenueMaps from 'consts/movie-Id-revenue-map'
-import { getMovieData } from "script/get-movie"
 import MovieCard from 'components/movie-ranking/movie'
 
 export const getStaticProps: GetStaticProps<{ movies: Movie[] }> = async () =>  {
@@ -24,7 +26,31 @@ export const getStaticProps: GetStaticProps<{ movies: Movie[] }> = async () =>  
   }
 }
 
+const flatMovieIdRevenueMap = new Map([
+  ...Array.from(movieIdRevenueMaps[0]), 
+  ...Array.from(movieIdRevenueMaps[1]), 
+  ...Array.from(movieIdRevenueMaps[2])
+])
+
 const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ movies }) => {
+  const getKey = (pageIndex: number) => {
+    if (pageIndex === 3) return null
+    return `http://localhost:3000/api/movies?page=${pageIndex + 1}`
+  }
+
+  const {data: moreMoviesInRanking, size, setSize} = useSWRInfinite(
+    getKey,
+    (url): Promise<Movie[]> => fetch(url).then((r) => r.json()),
+    {
+      initialSize: 1,
+      revalidateFirstPage: false,
+      fallback: movies
+    }
+  )
+
+  const getMovies = () => {
+    if (getKey(size)) setSize(size + 1)
+  }
 
   return (
     <Box 
@@ -64,26 +90,48 @@ const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
           list-style-type: none;
         `}
       >
+
         <VStack spacing={{ base: 12, md: 6 }}>
           {
-            movies.map((movie, i) => 
-              <ListItem 
-                key={i}
-                css={css`
-                  li:before {
-                  counter-increment: item;
-                  content: counter(item)'.';
-                `}
-              >
-                <MovieCard 
-                  movie={movie}
-                  revenue={movieIdRevenueMaps[0].get(movie.id)!}
-                />
-              </ListItem>
-            )
+            moreMoviesInRanking ?
+              moreMoviesInRanking.map((movies, i) => 
+                movies.map((movie, i) => 
+                <ListItem 
+                  key={i}
+                  css={css`
+                    li:before {
+                    counter-increment: item;
+                    content: counter(item)'.';
+                  `}
+                >
+                  <MovieCard 
+                    movie={movie}
+                    revenue={flatMovieIdRevenueMap.get(movie.id)!}
+                  />
+                </ListItem>
+              )):
+              <></>
           }
         </VStack>
       </OrderedList>
+
+      <Flex
+        justify="center"
+        p={4}
+      >
+        <Button 
+          onClick={getMovies}
+          display={getKey(size) ? "inline-flex": "none"}
+        >
+          {'さらに読み込む'}
+        </Button>
+
+        <CheckIcon 
+          display={getKey(size) ? "none": "inline-flex"}
+          color="white" 
+          opacity={0.5} 
+        />
+      </Flex>
     </Box>
   )
 }
