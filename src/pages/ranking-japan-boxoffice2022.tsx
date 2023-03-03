@@ -1,6 +1,7 @@
 import { css } from "@emotion/react";
 import { Movie, MovieId, MovieRevenue } from "../types/movie";
 import { NextPage, GetStaticProps, InferGetStaticPropsType } from "next"
+import movieIdRevenueMaps from 'consts/movie-Id-revenue-map'
 import {
   Box,
   Heading,
@@ -9,32 +10,10 @@ import {
   VStack,
   Text
 } from '@chakra-ui/react'
-
 import MovieCard from '../components/movie-ranking/movie'
 
-const moviesRevenueMap: ReadonlyMap<MovieId, MovieRevenue> = new Map([
-  [900667, 197],
-  [810693, 137.5],
-  [916224, 137.4],
-  [361743, 135.7],
-  [783675, 107.7],
-  [903939, 97.8],
-  [507086, 63.2],
-  [961420, 51.6],
-  [338953, 46.0],
-  [634429, 44.4],
-  [634649, 44.4],
-])
-
-const getTopTenMovieData = (): Promise<Movie>[] => {
-  const movieIdList: MovieId[] = Array.from(moviesRevenueMap.keys())
-  return movieIdList.map((id) => {
-    return fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=ja`).then(res => res.json())
-  })
-}
-
 export const getStaticProps: GetStaticProps<{ movies: Movie[] }> = async () =>  {
-  const movies: Movie[] = await Promise.all(getTopTenMovieData())
+  const movies: Movie[] = await fetch(`http://localhost:3000/api/movies?page=1`).then(res => res.json())
 
   return {
     props: { movies },
@@ -95,7 +74,7 @@ const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
               >
                 <MovieCard 
                   movie={movie}
-                  revenue={moviesRevenueMap.get(movie.id)!}
+                  revenue={movieIdRevenueMaps[0].get(movie.id)!}
                 />
               </ListItem>
             )
