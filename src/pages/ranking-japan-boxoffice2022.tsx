@@ -1,7 +1,6 @@
 import { css } from "@emotion/react";
-import { Movie, MovieId, MovieRevenue } from "../types/movie";
-import { NextPage, GetStaticProps, InferGetStaticPropsType } from "next"
-import movieIdRevenueMaps from 'consts/movie-Id-revenue-map'
+import useSWRInfinite from "swr/infinite";
+import type { NextPage, GetStaticProps, InferGetStaticPropsType } from "next"
 import {
   Box,
   Heading,
@@ -10,7 +9,11 @@ import {
   VStack,
   Text
 } from '@chakra-ui/react'
-import MovieCard from '../components/movie-ranking/movie'
+
+import type { Movie } from "types/movie";
+import movieIdRevenueMaps from 'consts/movie-Id-revenue-map'
+import { getMovieData } from "script/get-movie"
+import MovieCard from 'components/movie-ranking/movie'
 
 export const getStaticProps: GetStaticProps<{ movies: Movie[] }> = async () =>  {
   const movies: Movie[] = await fetch(`http://localhost:3000/api/movies?page=1`).then(res => res.json())
