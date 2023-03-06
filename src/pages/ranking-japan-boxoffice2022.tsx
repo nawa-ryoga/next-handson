@@ -16,10 +16,11 @@ import { CheckIcon } from '@chakra-ui/icons'
 import type { Movie } from "types/movie";
 import movieIdRevenueMaps from 'consts/movie-Id-revenue-map'
 import MovieCard from 'components/movie-ranking/movie'
+import { getMovieData } from 'script/get-movie'
 
 export const getStaticProps: GetStaticProps<{ movies: Movie[], origin?: string }> = async () =>  {
+  const movies: Movie[] = await Promise.all(getMovieData(0))
   const origin = process.env.SERVER_ORIGIN
-  const movies: Movie[] = await fetch(`${origin}/api/movies?page=1`).then(res => res.json())
 
   return {
     props: { 
@@ -36,7 +37,7 @@ const flatMovieIdRevenueMap = new Map([
   ...Array.from(movieIdRevenueMaps[2])
 ])
 
-const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ movies, origin }) => {
+const RankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ movies, origin }) => {
   const getKey = (pageIndex: number) => {
     if (pageIndex === 3) return null
     return `${origin}/api/movies?page=${pageIndex + 1}`
@@ -140,4 +141,4 @@ const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
   )
 }
 
-export default rankingJapanBoxoffice2022
+export default RankingJapanBoxoffice2022
