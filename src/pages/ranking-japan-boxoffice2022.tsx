@@ -18,7 +18,7 @@ import movieIdRevenueMaps from 'consts/movie-Id-revenue-map'
 import MovieCard from 'components/movie-ranking/movie'
 
 export const getStaticProps: GetStaticProps<{ movies: Movie[] }> = async () =>  {
-  const movies: Movie[] = await fetch(`http://localhost:3000/api/movies?page=1`).then(res => res.json())
+  const movies: Movie[] = await fetch(`${process.env.SERVER_ORIGIN}/api/movies?page=1`).then(res => res.json())
 
   return {
     props: { movies },
