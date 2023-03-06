@@ -95,7 +95,7 @@ const RankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
 
         <VStack spacing={{ base: 12, md: 6 }}>
           {
-            moreMoviesInRanking ?
+            moreMoviesInRanking &&
               moreMoviesInRanking.map((movies, i) => 
                 movies.map((movie, i) => 
                 <ListItem 
@@ -111,8 +111,7 @@ const RankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
                     revenue={flatMovieIdRevenueMap.get(movie.id)!}
                   />
                 </ListItem>
-              )):
-              <></>
+              ))
           }
         </VStack>
       </OrderedList>
