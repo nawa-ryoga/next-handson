@@ -6,6 +6,11 @@ import {
   Text,
   Image,
   Flex, 
+  FlexProps,
+  Card,
+  CardHeader,
+  CardBody,
+  HStack
 } from '@chakra-ui/react'
 
 interface Props {
@@ -20,62 +25,111 @@ const backgroundStyle = (backdrop_path?: string): string => {
     overlay
 }
 
+type MoviePoster = Pick<Movie, "poster_path" | "title">
+
+const MoviePoster = ({poster_path, title, display, mx, mt, h}: MoviePoster & FlexProps) => {
+  return (
+    <Flex
+      maxW="150px"
+      minW="150px"
+      align="center"
+      display={display}
+      mx={mx}
+      mt={mt}
+      h={h}
+    >
+      <CardBody 
+        p={0}
+      >
+        <Image 
+          src={`${process.env.NEXT_PUBLIC_TMDB_IMG_PATH}/${poster_path}`} 
+          alt={`${title}のポスター`} 
+          maxW="100%"
+        />
+      </CardBody>
+    </Flex>
+  )
+}
+
 const MovieCard = ({ movie, revenue }: Props) => {
   return (
-    <Box
-      px="3"
-      py="6"
-      maxW="60%"
+    <Card
+      maxW={{ base: "100%", md: "70%" }}
       mx="auto"
+      bg={backgroundStyle(movie.backdrop_path)}
     >
       <Flex
         w="100%"
         h="auto"
-        p="4"
         borderRadius="4"
-        bg={backgroundStyle(movie.backdrop_path)}
       >
-        <Box
-          pr="4"
-        >
-          <Heading
-            as="h3"
-            size="md"
-            fontSize="1.5rem"
+        <Box>
+          <CardHeader>
+            <Heading
+              as="h3"
+              size="md"
+              fontSize={{ base: "1.3rem", md: "1.5rem" }}
+              textAlign={{ base: "center", md: "left" }}
+            >
+              {movie.title}
+            </Heading>
+
+            <HStack
+              justify={{ base: "center", md: "left" }}
+            >
+              <Text 
+                fontSize="0.7rem"
+                pt={0.5}
+              >
+                興行収入：
+              </Text>
+              <Heading
+                as="h4"
+                size="sm"
+                fontSize="1.1rem"
+                py="1"
+              >
+                {`${revenue}億円`}
+              </Heading>
+            </HStack>
+
+            <MoviePoster 
+              display={{ base: "flex", md: "none" }}
+              mx="auto"
+              mt={3}
+              title={movie.title}
+              poster_path={movie.poster_path}
+            />
+
+          </CardHeader>
+
+          <CardBody
+            pt={0}
           >
-            {movie.title}
-          </Heading>
-          <Heading
-            as="h4"
-            size="sm"
-            fontSize="1.1rem"
-            py="1"
-          >
-            {`
-              興行収入：${revenue}億円
-            `}
-          </Heading>
-          <Text
-            fontSize="14px"
-            lineHeight="1.5"
-            opacity="0.8"
-            mt="4"
-          >
-            {movie.overview}
-          </Text>
+            <Text
+              fontSize="14px"
+              lineHeight="1.5"
+              opacity="0.8"
+              textAlign="justify"
+            >
+              {movie.overview}
+            </Text>
+          </CardBody>
         </Box>
-        <Flex
-          maxW="150px"
-          align="center"
+
+        <CardBody
+          display={{ base: "none", md: "block" }}
         >
-          <Image 
-            src={`${process.env.NEXT_PUBLIC_TMDB_IMG_PATH}/${movie.poster_path}`} 
-            alt={`${movie.title}のポスター`} 
-            maxW="100%"
+          <MoviePoster 
+            display={{ base: "none", md: "flex" }}
+            title={movie.title}
+            poster_path={movie.poster_path}
+            h="100%"
           />
-        </Flex>
+        </CardBody>
+
       </Flex>
-    </Box>
+    </Card>
   )
 }
 

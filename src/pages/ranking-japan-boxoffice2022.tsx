@@ -5,7 +5,9 @@ import {
   Box,
   Heading,
   OrderedList,
-  ListItem
+  ListItem,
+  VStack,
+  Text
 } from '@chakra-ui/react'
 
 import MovieCard from '../components/movie-ranking/movie'
@@ -41,42 +43,61 @@ const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
 
   return (
     <Box 
-      p="8"
+      p={{ base: 4, md: 8 }}
     >
-      <Heading
-        textAlign="center"
-        fontSize="1.7rem"
+      <VStack spacing={2}>
+        <Heading
+          textAlign="center"
+          fontSize="1.3rem"
+          display={{ base: "block", md: "none" }}
         >
-        2022年映画興行収入ランキング日本おすすめ（上半期/下半期/洋画/邦画/アニメ）
-      </Heading>
+          2022年映画興行収入ランキング<br/>日本おすすめ
+        </Heading>
+        <Heading
+          textAlign="center"
+          fontSize="1.6rem"
+          display={{ base: "none", md: "block" }}
+        >
+          2022年映画興行収入ランキング 日本おすすめ
+        </Heading>
+        <Text
+          textAlign="center"
+          fontSize={{ base: "0.8rem", md: "1.2rem" }}
+        >
+        （上半期 / 下半期 / 洋画 / 邦画 / アニメ）
+        </Text>
+      </VStack>
 
       <Box
         py="6"
       >
       </Box>
       <OrderedList
+        marginInlineStart={0}
         css={css`
           counter-reset: item;
           list-style-type: none;
         `}
       >
-        {
-          movies.map((movie, i) => 
-            <ListItem 
-              key={i}
-              css={css`
-                li:before {
-                counter-increment: item;
-                content: counter(item)'.';
-              `}
-            >
-              <MovieCard 
-                movie={movie}
-                revenue={moviesRevenueMap.get(movie.id)!}
-              />
-            </ListItem>
-          )
-        }
+        <VStack spacing={{ base: 12, md: 6 }}>
+          {
+            movies.map((movie, i) => 
+              <ListItem 
+                key={i}
+                css={css`
+                  li:before {
+                  counter-increment: item;
+                  content: counter(item)'.';
+                `}
+              >
+                <MovieCard 
+                  movie={movie}
+                  revenue={moviesRevenueMap.get(movie.id)!}
+                />
+              </ListItem>
+            )
+          }
+        </VStack>
       </OrderedList>
     </Box>
   )

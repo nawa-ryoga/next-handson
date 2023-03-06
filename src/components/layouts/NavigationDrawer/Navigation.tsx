@@ -1,37 +1,61 @@
 import NextLink from 'next/link'
 import { Link } from '@chakra-ui/react'
+import { useRouter } from 'next/router';
 
-import { Text, VStack, Button } from '@chakra-ui/react'
+import { Text, VStack, Button, ButtonProps } from '@chakra-ui/react'
 
 type MenuButtonProps = { 
   text: string, 
-  link: string, 
+  href: string, 
   opacity: number 
 }
 
-const MenuButton = ({text, link, opacity}: MenuButtonProps) => {
+const MenuButtonText = ({text, opacity, isActive}: Pick<MenuButtonProps, "text" | "opacity"> & ButtonProps)  => {
   return (
-    <Link 
-      href={link}
-      display="contents"
-      as={NextLink}
+    <Button 
+      w="100%"
+      h={12}
+      px={8}
+      borderRadius={0}
+      justifyContent="start"
+      background="chakra-body-bg"
+      isActive={isActive}
+      _active={{ background: "var(--chakra-colors-gray-700)" }}
     >
-      <Button 
-        w="100%"
-        h={12}
-        px={8}
-        borderRadius={0}
-        justifyContent="start"
-        background="chakra-body-bg"
+      <Text
+        opacity={opacity}
+        fontSize='0.8rem'
       >
-        <Text
-          opacity={opacity}
-          fontSize='0.8rem'
-        >
-          {text}
-        </Text>
-      </Button>
-    </Link>
+        {text}
+      </Text>
+    </Button>
+  )
+}
+
+const MenuButton = ({text, href, opacity}: MenuButtonProps) => {
+  const { pathname } = useRouter()
+  const isCurrentPage = pathname === href
+  const currentOpacity = isCurrentPage ? opacity + 0.2: opacity
+
+  return (
+    isCurrentPage ?
+
+      <MenuButtonText 
+        text={text}
+        opacity={currentOpacity}
+        isActive={true}
+      />:
+
+      <Link 
+        href={href}
+        display="contents"
+        as={NextLink}
+      >
+        <MenuButtonText 
+          text={text}
+          opacity={currentOpacity}
+        />
+      </Link>
   )
 }
 
@@ -53,13 +77,14 @@ const Navigation = ({smallDisplay}: {smallDisplay?: boolean}) => {
   return (
     <VStack
       py="12"
+      spacing={0}
     >
       {
         navigationMenuList().map((menu, i) =>
           <MenuButton 
             key={i}
             text={menu.display}
-            link={menu.route}
+            href={menu.route}
             opacity={smallDisplay ? 0.8: 0.3}
           />
         )
