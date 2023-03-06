@@ -17,11 +17,15 @@ import type { Movie } from "types/movie";
 import movieIdRevenueMaps from 'consts/movie-Id-revenue-map'
 import MovieCard from 'components/movie-ranking/movie'
 
-export const getStaticProps: GetStaticProps<{ movies: Movie[] }> = async () =>  {
-  const movies: Movie[] = await fetch(`${process.env.SERVER_ORIGIN}/api/movies?page=1`).then(res => res.json())
+export const getStaticProps: GetStaticProps<{ movies: Movie[], origin?: string }> = async () =>  {
+  const origin = process.env.SERVER_ORIGIN
+  const movies: Movie[] = await fetch(`${origin}/api/movies?page=1`).then(res => res.json())
 
   return {
-    props: { movies },
+    props: { 
+      movies,
+      origin
+    },
     revalidate: 60
   }
 }
@@ -32,10 +36,10 @@ const flatMovieIdRevenueMap = new Map([
   ...Array.from(movieIdRevenueMaps[2])
 ])
 
-const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ movies }) => {
+const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ movies, origin }) => {
   const getKey = (pageIndex: number) => {
     if (pageIndex === 3) return null
-    return `http://localhost:3000/api/movies?page=${pageIndex + 1}`
+    return `${origin}/api/movies?page=${pageIndex + 1}`
   }
 
   const {data: moreMoviesInRanking, size, setSize} = useSWRInfinite(
