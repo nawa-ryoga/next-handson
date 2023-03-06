@@ -33,11 +33,12 @@ const flatMovieIdRevenueMap = new Map([
   ...Array.from(movieIdRevenueMaps[2])
 ])
 
+const getKey = (pageIndex: number) => {
+  if (pageIndex === 3) return null
+  return `${process.env.NEXT_PUBLIC_SERVER_ORIGIN}/api/movies?page=${pageIndex + 1}`
+}
+
 const RankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ movies }) => {
-  const getKey = (pageIndex: number) => {
-    if (pageIndex === 3) return null
-    return `${process.env.NEXT_PUBLIC_SERVER_ORIGIN}/api/movies?page=${pageIndex + 1}`
-  }
 
   const {data: moreMoviesInRanking, size, setSize} = useSWRInfinite(
     getKey,
