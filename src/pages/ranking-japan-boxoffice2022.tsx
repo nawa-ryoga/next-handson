@@ -35,7 +35,8 @@ export const getStaticProps: GetStaticProps<{ movies: Movie[] }> = async () =>  
   const movies: Movie[] = await Promise.all(responseList.map(async (res): Promise<Movie> => res.json()))
 
   return {
-    props: { movies }
+    props: { movies },
+    revalidate: 60
   }
 }
 
