@@ -1,38 +1,25 @@
 import { css } from "@emotion/react";
-import { Movie, MovieId, MovieRevenue } from "../types/movie";
-import { NextPage, GetStaticProps, InferGetStaticPropsType } from "next"
+import useSWRInfinite from "swr/infinite";
+import type { NextPage, GetStaticProps, InferGetStaticPropsType } from "next"
 import {
   Box,
   Heading,
   OrderedList,
   ListItem,
   VStack,
-  Text
+  Text,
+  Button,
+  Flex
 } from '@chakra-ui/react'
+import { CheckIcon } from '@chakra-ui/icons'
 
-import MovieCard from '../components/movie-ranking/movie'
-
-const moviesRevenueMap: ReadonlyMap<MovieId, MovieRevenue> = new Map([
-  [900667, 197],
-  [810693, 137.5],
-  [916224, 137.4],
-  [361743, 135.7],
-  [783675, 107.7],
-  [903939, 97.8],
-  [507086, 63.2],
-  [961420, 51.6],
-  [338953, 46.0],
-  [634429, 44.4],
-  [634649, 44.4],
-])
+import type { Movie } from "types/movie";
+import movieIdRevenueMaps from 'consts/movie-Id-revenue-map'
+import MovieCard from 'components/movie-ranking/movie'
+import { getMovieData } from 'script/get-movie'
 
 export const getStaticProps: GetStaticProps<{ movies: Movie[] }> = async () =>  {
-  const movieIdList: MovieId[] = Array.from(moviesRevenueMap.keys())
-  const promiseList = movieIdList.map((id) => {
-    return fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.TMDB_API_KEY}&language=ja`)
-  })
-  const responseList = await Promise.all(promiseList)
-  const movies: Movie[] = await Promise.all(responseList.map(async (res): Promise<Movie> => res.json()))
+  const movies: Movie[] = await Promise.all(getMovieData(0))
 
   return {
     props: { movies },
@@ -40,7 +27,32 @@ export const getStaticProps: GetStaticProps<{ movies: Movie[] }> = async () =>  
   }
 }
 
-const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ movies }) => {
+const flatMovieIdRevenueMap = new Map([
+  ...Array.from(movieIdRevenueMaps[0]), 
+  ...Array.from(movieIdRevenueMaps[1]), 
+  ...Array.from(movieIdRevenueMaps[2])
+])
+
+const getKey = (pageIndex: number) => {
+  if (pageIndex === 3) return null
+  return `${process.env.NEXT_PUBLIC_SERVER_ORIGIN}/api/movies?page=${pageIndex + 1}`
+}
+
+const RankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStaticProps>> = ({ movies }) => {
+
+  const {data: moreMoviesInRanking, size, setSize} = useSWRInfinite(
+    getKey,
+    (url): Promise<Movie[]> => fetch(url).then((r) => r.json()),
+    {
+      initialSize: 1,
+      revalidateFirstPage: false,
+      fallback: movies
+    }
+  )
+
+  const getMovies = () => {
+    if (getKey(size)) setSize(size + 1)
+  }
 
   return (
     <Box 
@@ -80,28 +92,49 @@ const rankingJapanBoxoffice2022: NextPage<InferGetStaticPropsType<typeof getStat
           list-style-type: none;
         `}
       >
+
         <VStack spacing={{ base: 12, md: 6 }}>
           {
-            movies.map((movie, i) => 
-              <ListItem 
-                key={i}
-                css={css`
-                  li:before {
-                  counter-increment: item;
-                  content: counter(item)'.';
-                `}
-              >
-                <MovieCard 
-                  movie={movie}
-                  revenue={moviesRevenueMap.get(movie.id)!}
-                />
-              </ListItem>
-            )
+            moreMoviesInRanking &&
+              moreMoviesInRanking.map((movies, i) => 
+                movies.map((movie, i) => 
+                <ListItem 
+                  key={i}
+                  css={css`
+                    li:before {
+                    counter-increment: item;
+                    content: counter(item)'.';
+                  `}
+                >
+                  <MovieCard 
+                    movie={movie}
+                    revenue={flatMovieIdRevenueMap.get(movie.id)!}
+                  />
+                </ListItem>
+              ))
           }
         </VStack>
       </OrderedList>
+
+      <Flex
+        justify="center"
+        p={4}
+      >
+        <Button 
+          onClick={getMovies}
+          display={getKey(size) ? "inline-flex": "none"}
+        >
+          {'さらに読み込む'}
+        </Button>
+
+        <CheckIcon 
+          display={getKey(size) ? "none": "inline-flex"}
+          color="white" 
+          opacity={0.5} 
+        />
+      </Flex>
     </Box>
   )
 }
 
-export default rankingJapanBoxoffice2022
+export default RankingJapanBoxoffice2022
